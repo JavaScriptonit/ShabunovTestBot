@@ -1,11 +1,8 @@
 const { againOptions, gameOptions } = require('./options');
-
 const TelegramApi = require('node-telegram-bot-api');
-
+const { stickers } = require("./stickers");
 const token = '5331372857:AAFenSlpTWqCrb-5yFB5YsMsjqBh-_qF3rk';
-
 const bot = new TelegramApi(token, {polling: true});
-
 const chats = {}
 
 const startGame = async (chatId) => {
@@ -25,13 +22,15 @@ const start = () => {
    bot.on('message', async msg => {
       const text = msg.text;
       const chatId = msg.chat.id;
+      const userName = `${msg.from.first_name} ${msg.from.last_name}`;
 
       if (text === '/start') {
-         await bot.sendMessage(chatId, 'https://tlgrm.eu/_/stickers/987/a9a/987a9af2-cc48-41b1-aa72-011cc4acad4e/256/2.webp');
-         return  bot.sendMessage(chatId, `Добро пожаловать в телеграм бот Шабунова Андрея Андреевича https://github.com/JavaScriptonit/ShabunovTestBot`);
+         await bot.sendSticker(chatId, stickers.disney.pocahontas);
+         return  bot.sendMessage(chatId, `${userName}, добро пожаловать в телеграм бот Шабунова Андрея Андреевича`);
       }
       if (text === '/info') {
-         return  bot.sendMessage(chatId, `Тебя зовут ${msg.from.first_name} ${msg.from.last_name}`);
+         await bot.sendSticker(chatId, stickers.disney.allIn);
+         return  bot.sendMessage(chatId, `Тебя зовут ${userName}`);
       }
       if (text === '/game') {
          return startGame(chatId);
